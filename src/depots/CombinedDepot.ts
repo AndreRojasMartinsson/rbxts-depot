@@ -55,18 +55,19 @@ export class _combinedDepot<TState extends object, TMutator extends object> {
 			}
 		}
 
-		const currentState = this.getState()[DepotName as never] as TState;
+		const oldState = this.getState();
+		const currentState = oldState[DepotName as never] as TState;
 		const mutators = this.mutator[DepotName as never] as unknown as TMutator;
 		const newState = Immutable((mutators[Type] as Mutator<TState>)(currentState, ...Payload)) as TState;
 
-		this._emitMiddlewares(Type, newState, currentState, ...Payload).andThen((result) => {
+		this._emitMiddlewares(Type, newState, oldState, ...Payload).andThen((result) => {
 			if (!result) return;
 
 			this.state = {
-				...this.getState(),
+				...oldState,
 				[DepotName]: newState,
 			};
-			this.emit(Type, newState, currentState);
+			this.emit(Type, newState, oldState);
 		});
 	}
 

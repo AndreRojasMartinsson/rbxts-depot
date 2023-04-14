@@ -74,10 +74,8 @@ do
 				return nil
 			end
 			local _object = {}
-			if type(currentState) == "table" then
-				for _k, _v in currentState do
-					_object[_k] = _v
-				end
+			for _k, _v in self:getState() do
+				_object[_k] = _v
 			end
 			_object[DepotName] = newState
 			self.state = _object
