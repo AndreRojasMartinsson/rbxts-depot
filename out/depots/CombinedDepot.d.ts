@@ -13,8 +13,8 @@ export declare class _combinedDepot<TState extends object, TMutator extends obje
     listen(callback: Listener<TState>): EmptyFunction;
     flush(): void;
     dispatch<TKey extends Extract<keyof TMutator, string>>(Type: TKey, ...Payload: Payload<TKey, TMutator>): void;
-    _emitMiddlewares(Action: string, NewState: TState, OldState: TState): Promise<boolean>;
+    private _emitMiddlewares;
     _unstableSetState(NewState: TState): Promise<void>;
     addMiddleware(middleware: Middleware<TState>): void;
-    emit(Action: string, NewState: TState, OldState: TState): void;
+    private emit;
 }

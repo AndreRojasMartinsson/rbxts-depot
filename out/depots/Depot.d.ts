@@ -13,5 +13,5 @@ export declare class _depot<TState extends object, TMutator extends object> {
     listen(callback: Listener<TState>): EmptyFunction;
     flush(): void;
     dispatch<TKey extends Extract<keyof TMutator, string>>(Type: TKey, ...Payload: Payload<TKey, TMutator>): void;
-    emit(Action: string, NewState: TState, OldState: TState): void;
+    private emit;
 }

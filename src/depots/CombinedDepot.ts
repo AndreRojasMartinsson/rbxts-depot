@@ -14,12 +14,14 @@ export class _combinedDepot<TState extends object, TMutator extends object> {
 	readonly initialState: Readonly<TState>;
 	readonly mutator: TMutator;
 
-	constructor(Data: ConstructorData<TState, TMutator>) {
+	constructor(Data: ConstructorData<TState, TMutator>, Middleware: Middleware<TState>[]) {
 		this.initialState = Immutable(Data.InitialState);
 		this.state = Immutable(Data.InitialState);
 		this.mutator = Immutable(Data.Mutator);
 		this.listeners = [];
-		this.middleware = [];
+		this.middleware = Middleware;
+
+		this._emitMiddlewares("__INIT__", this.initialState, this.initialState);
 	}
 
 	getState(): Readonly<TState> {

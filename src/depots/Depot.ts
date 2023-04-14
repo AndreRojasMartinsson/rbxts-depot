@@ -8,6 +8,7 @@ import {
 	UnknownObject,
 	Payload,
 	Mutator,
+	Middleware,
 } from "../Types";
 
 export const Immutable = <O extends object>(object: O): Readonly<O> => {
@@ -26,6 +27,7 @@ export class _depot<TState extends object, TMutator extends object> {
 	// Static methods
 	static Combine<TState extends object, TMutator extends object>(
 		Map: DepotMap<TState>,
+		Middleware: Middleware<TState>[],
 	): _combinedDepot<TState, TMutator> {
 		const initialState: UnknownObject = {};
 		const mutators: UnknownObject = {};
@@ -35,10 +37,13 @@ export class _depot<TState extends object, TMutator extends object> {
 			mutators[childName] = Immutable(childDepot.mutator);
 		}
 
-		return new _combinedDepot<TState, TMutator>({
-			Mutator: mutators as TMutator,
-			InitialState: initialState as TState,
-		});
+		return new _combinedDepot<TState, TMutator>(
+			{
+				Mutator: mutators as TMutator,
+				InitialState: initialState as TState,
+			},
+			Middleware,
+		);
 	}
 
 	constructor(Data: ConstructorData<TState, TMutator>) {
