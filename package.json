@@ -3,6 +3,10 @@
 	"version": "1.1.5",
 	"description": "Depot - A powerful and flexible state management library for modern applications.",
 	"main": "out/init.lua",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/AndreRojasMartinsson/rbxts-depot"
+	},
 	"scripts": {
 		"build": "rbxtsc",
 		"watch": "rbxtsc -w",
@@ -11,6 +15,7 @@
 	"homepage": "https://github.com/AndreRojasMartinsson/rbxts-depot#readme",
 	"keywords": [
 		"depot",
+		"AndreRojasMartinsson",
 		"rootentry",
 		"roblox",
 		"ts",
