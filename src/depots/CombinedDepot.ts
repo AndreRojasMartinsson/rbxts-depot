@@ -56,7 +56,7 @@ export class _combinedDepot<TState extends object, TMutator extends object> {
 		}
 
 		const oldState = this.getState();
-		const currentState = oldState[DepotName as never] as TState;
+		const currentState = this.getState()[DepotName as never] as TState;
 		const mutators = this.mutator[DepotName as never] as unknown as TMutator;
 		const newState = Immutable((mutators[Type] as Mutator<TState>)(currentState, ...Payload)) as TState;
 
