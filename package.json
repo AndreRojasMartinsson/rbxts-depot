@@ -1,6 +1,6 @@
 {
 	"name": "@rbxts/depot",
-	"version": "1.1.5",
+	"version": "1.1.6",
 	"description": "Depot - A powerful and flexible state management library for modern applications.",
 	"main": "out/init.lua",
 	"repository": {
