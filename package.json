@@ -8,7 +8,7 @@
 		"watch": "rbxtsc -w",
 		"prepublishOnly": "pnpm run build"
 	},
-	"homepage": "",
+	"homepage": "https://github.com/AndreRojasMartinsson/rbxts-depot#readme",
 	"keywords": [
 		"depot",
 		"rootentry",
