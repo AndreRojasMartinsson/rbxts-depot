@@ -73,7 +73,7 @@ export class _combinedDepot<TState extends object, TMutator extends object> {
 	private async _emitMiddlewares(Action: string, NewState: TState, OldState: TState): Promise<boolean> {
 		let pass = true;
 		for (const middleware of this.middleware) {
-			const response = await middleware("__SETSTATE__", NewState, OldState);
+			const response = await middleware(Action, NewState, OldState);
 			if (!response) {
 				pass = false;
 				break;

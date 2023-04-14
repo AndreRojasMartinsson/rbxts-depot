@@ -1,13 +1,13 @@
 /// <reference types="@rbxts/compiler-types" />
 import { _combinedDepot } from "./CombinedDepot";
-import { ConstructorData, DepotMap, EmptyFunction, Listener, Payload } from "../Types";
+import { ConstructorData, DepotMap, EmptyFunction, Listener, Payload, Middleware } from "../Types";
 export declare const Immutable: <O extends object>(object: O) => Readonly<O>;
 export declare class _depot<TState extends object, TMutator extends object> {
     private listeners;
     private state;
     readonly initialState: Readonly<TState>;
     readonly mutator: TMutator;
-    static Combine<TState extends object, TMutator extends object>(Map: DepotMap<TState>): _combinedDepot<TState, TMutator>;
+    static Combine<TState extends object, TMutator extends object>(Map: DepotMap<TState>, Middleware: Middleware<TState>[]): _combinedDepot<TState, TMutator>;
     constructor(Data: ConstructorData<TState, TMutator>);
     getState(): Readonly<TState>;
     listen(callback: Listener<TState>): EmptyFunction;

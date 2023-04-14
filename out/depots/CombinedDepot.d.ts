@@ -8,7 +8,7 @@ export declare class _combinedDepot<TState extends object, TMutator extends obje
     private middleware;
     readonly initialState: Readonly<TState>;
     readonly mutator: TMutator;
-    constructor(Data: ConstructorData<TState, TMutator>);
+    constructor(Data: ConstructorData<TState, TMutator>, Middleware: Middleware<TState>[]);
     getState(): Readonly<TState>;
     listen(callback: Listener<TState>): EmptyFunction;
     flush(): void;

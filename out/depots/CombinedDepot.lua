@@ -18,12 +18,13 @@ do
 		local self = setmetatable({}, _combinedDepot)
 		return self:constructor(...) or self
 	end
-	function _combinedDepot:constructor(Data)
+	function _combinedDepot:constructor(Data, Middleware)
 		self.initialState = Immutable(Data.InitialState)
 		self.state = Immutable(Data.InitialState)
 		self.mutator = Immutable(Data.Mutator)
 		self.listeners = {}
-		self.middleware = {}
+		self.middleware = Middleware
+		self:_emitMiddlewares("__INIT__", self.initialState, self.initialState)
 	end
 	function _combinedDepot:getState()
 		return self.state

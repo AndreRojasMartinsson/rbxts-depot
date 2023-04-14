@@ -25,7 +25,7 @@ do
 		self.mutator = Immutable(Data.Mutator)
 		self.listeners = {}
 	end
-	function _depot:Combine(Map)
+	function _depot:Combine(Map, Middleware)
 		local initialState = {}
 		local mutators = {}
 		for childName, childDepot in pairs(Map) do
@@ -35,7 +35,7 @@ do
 		return _combinedDepot.new({
 			Mutator = mutators,
 			InitialState = initialState,
-		})
+		}, Middleware)
 	end
 	function _depot:getState()
 		return self.state
