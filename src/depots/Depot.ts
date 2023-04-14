@@ -75,7 +75,7 @@ export class _depot<TState extends object, TMutator extends object> {
 		this.emit(Type, newState, currentState);
 	}
 
-	emit(Action: string, NewState: TState, OldState: TState): void {
+	private emit(Action: string, NewState: TState, OldState: TState): void {
 		for (const listener of this.listeners) {
 			listener(Action, NewState, OldState);
 		}

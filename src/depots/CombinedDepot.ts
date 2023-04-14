@@ -68,7 +68,7 @@ export class _combinedDepot<TState extends object, TMutator extends object> {
 		});
 	}
 
-	async _emitMiddlewares(Action: string, NewState: TState, OldState: TState): Promise<boolean> {
+	private async _emitMiddlewares(Action: string, NewState: TState, OldState: TState): Promise<boolean> {
 		let pass = true;
 		for (const middleware of this.middleware) {
 			const response = await middleware("__SETSTATE__", NewState, OldState);
@@ -95,7 +95,7 @@ export class _combinedDepot<TState extends object, TMutator extends object> {
 		this.middleware.push(middleware);
 	}
 
-	emit(Action: string, NewState: TState, OldState: TState): void {
+	private emit(Action: string, NewState: TState, OldState: TState): void {
 		for (const listener of this.listeners) {
 			listener(Action, NewState, OldState);
 		}
