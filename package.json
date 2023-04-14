@@ -1,0 +1,47 @@
+{
+	"name": "@rbxts/depot",
+	"version": "1.1.4",
+	"description": "Depot - A powerful and flexible state management library for modern applications.",
+	"main": "out/init.lua",
+	"scripts": {
+		"build": "rbxtsc",
+		"watch": "rbxtsc -w",
+		"prepublishOnly": "pnpm run build"
+	},
+	"homepage": "",
+	"keywords": [
+		"depot",
+		"rootentry",
+		"roblox",
+		"ts",
+		"roblox-ts",
+		"tsc",
+		"ts",
+		"rbxts",
+		"rbxtsc",
+		"state",
+		"management"
+	],
+	"author": "RootEntry",
+	"license": "MIT",
+	"types": "out/index.d.ts",
+	"files": [
+		"out",
+		"!**/*.tsbuildinfo"
+	],
+	"publishConfig": {
+		"access": "public"
+	},
+	"devDependencies": {
+		"@rbxts/compiler-types": "2.1.0-types.1",
+		"@rbxts/types": "^1.0.676",
+		"@typescript-eslint/eslint-plugin": "^5.58.0",
+		"@typescript-eslint/parser": "^5.58.0",
+		"eslint": "^8.38.0",
+		"eslint-config-prettier": "^8.8.0",
+		"eslint-plugin-prettier": "^4.2.1",
+		"eslint-plugin-roblox-ts": "^0.0.35",
+		"prettier": "^2.8.7",
+		"typescript": "^5.0.4"
+	}
+}
