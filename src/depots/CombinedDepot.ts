@@ -1,4 +1,4 @@
-import { ConstructorData, EmptyFunction, Listener, Payload, MutatorRecord, Mutator } from "../Types";
+import { ConstructorData, EmptyFunction, Listener, Payload, MutatorRecord, Mutator, Middleware } from "../Types";
 
 export const Immutable = <O extends object>(object: O): Readonly<O> => {
 	if (table.isfrozen(object)) return table.clone(object) as Readonly<O>;
@@ -10,6 +10,7 @@ export class _combinedDepot<TState extends object, TMutator extends object> {
 	// Class Types
 	private listeners: Listener<TState>[];
 	private state: TState;
+	private middleware: Middleware<TState>[];
 	readonly initialState: Readonly<TState>;
 	readonly mutator: TMutator;
 
@@ -18,6 +19,7 @@ export class _combinedDepot<TState extends object, TMutator extends object> {
 		this.state = Immutable(Data.InitialState);
 		this.mutator = Immutable(Data.Mutator);
 		this.listeners = [];
+		this.middleware = [];
 	}
 
 	getState(): Readonly<TState> {
@@ -55,11 +57,42 @@ export class _combinedDepot<TState extends object, TMutator extends object> {
 		const mutators = this.mutator[DepotName as never] as unknown as TMutator;
 		const newState = Immutable((mutators[Type] as Mutator<TState>)(currentState, ...Payload)) as TState;
 
-		this.state = {
-			...currentState,
-			[DepotName]: newState,
-		};
-		this.emit(Type, newState, currentState);
+		this._emitMiddlewares(Type, newState, currentState).andThen((result) => {
+			if (!result) return;
+
+			this.state = {
+				...currentState,
+				[DepotName]: newState,
+			};
+			this.emit(Type, newState, currentState);
+		});
+	}
+
+	async _emitMiddlewares(Action: string, NewState: TState, OldState: TState): Promise<boolean> {
+		let pass = true;
+		for (const middleware of this.middleware) {
+			const response = await middleware("__SETSTATE__", NewState, OldState);
+			if (!response) {
+				pass = false;
+				break;
+			}
+		}
+
+		return pass;
+	}
+
+	async _unstableSetState(NewState: TState) {
+		const oldState = this.getState() as TState;
+
+		this._emitMiddlewares("__SETSTATE__", NewState, oldState).andThen((result) => {
+			if (!result) return;
+			this.state = Immutable(NewState);
+			this.emit("__SETSTATE__", NewState, oldState);
+		});
+	}
+
+	addMiddleware(middleware: Middleware<TState>) {
+		this.middleware.push(middleware);
 	}
 
 	emit(Action: string, NewState: TState, OldState: TState): void {

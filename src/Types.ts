@@ -2,6 +2,7 @@ import { _depot } from "./depots/Depot";
 
 type PayloadParam<T extends unknown[]> = T extends [unknown, ...infer P] ? P : never;
 
+export type Middleware<TState> = (Action: string, NewState: TState, OldState: TState) => Promise<boolean>;
 export type Payload<TKey extends keyof TMutator, TMutator> = PayloadParam<Parameters<TMutator[TKey]>>;
 export type Mutator<S> = (State: S, ...args: unknown[]) => S;
 export type Listener<S> = (Action: string, NewState: S, OldState: S) => void;

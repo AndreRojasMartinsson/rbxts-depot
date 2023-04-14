@@ -105,6 +105,44 @@ Now, when you call the `getState` method, the state of the Money & Counter depot
 
 **NOTE: _Duplicate mutator function names will get merged, and thus wont call all of them. Make sure to avoid name duplication. This ties in into the core fundementals of structuring the states._**
 
+### Middlewares
+
+**Note: _Currently this only works for Combined Depots_**
+
+Middlewares are essentially functions that can be used to
+intercept dispatches and either accept or reject it.
+
+Some common use cases for middlewares could be replicating data to the client from the server,
+or validating that the data is correct.
+
+Middlewares introduce side-effects and as such should be used with caution to ensure
+that you do not run into hard-to-catch bugs.
+
+As aforementioned, middleware are functions, and thus in order to create one you write a function with the following signature:
+
+**NOTE: _Middleware must be a 'async' function in order to work._**
+
+Middleware run before actually mutating the state, thus you can chose whether or not, inside of it, to
+set the new state. This is extremely powerful.
+
+```typescript
+const myDepot = ...;
+
+myDepot.addMiddleware(async(action, newState, oldState) => [
+	print(action, newState, oldState);
+	if (newState.exploiting) return false;
+
+	return true;
+])
+```
+
+When any action within the depot gets dispatched the middleware function we provided above will run.
+It will then print the action, newState, and oldState which you can use for whatever reason.
+
+In this case, it has a property called Exploiting, which when true will not update the state.
+
+**Middlewares run sequentially depending on the order they were added.**
+
 ## API
 
 ```typescript
@@ -142,3 +180,9 @@ static Combine<TState extends object, TMutator extends object>(Map: DepotMap<TSt
 ```
 
 Combines multiple depots into a single depot that can be used to manage multiple pieces of state at once.
+
+```typescript
+addMiddleware(middleware: Middleware<TState>): void
+```
+
+Creates a new middleware and adds it to the depot.
