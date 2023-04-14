@@ -63,7 +63,7 @@ export class _combinedDepot<TState extends object, TMutator extends object> {
 			if (!result) return;
 
 			this.state = {
-				...currentState,
+				...this.getState(),
 				[DepotName]: newState,
 			};
 			this.emit(Type, newState, currentState);

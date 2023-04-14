@@ -69,7 +69,7 @@ do
 		local currentState = self:getState()[DepotName]
 		local mutators = self.mutator[DepotName]
 		local newState = Immutable(mutators[Type](currentState, unpack(Payload)))
-		self:_emitMiddlewares(Type, newState, currentState):andThen(function(result)
+		self:_emitMiddlewares(Type, newState, currentState, unpack(Payload)):andThen(function(result)
 			if not result then
 				return nil
 			end
@@ -84,10 +84,11 @@ do
 			self:emit(Type, newState, currentState)
 		end)
 	end
-	_combinedDepot._emitMiddlewares = TS.async(function(self, Action, NewState, OldState)
+	_combinedDepot._emitMiddlewares = TS.async(function(self, Action, NewState, OldState, ...)
+		local Payload = { ... }
 		local pass = true
 		for _, middleware in self.middleware do
-			local response = TS.await(middleware(Action, NewState, OldState))
+			local response = TS.await(middleware(Action, NewState, OldState, unpack(Payload)))
 			if not response then
 				pass = false
 				break
