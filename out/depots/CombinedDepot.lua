@@ -87,7 +87,7 @@ do
 	_combinedDepot._emitMiddlewares = TS.async(function(self, Action, NewState, OldState)
 		local pass = true
 		for _, middleware in self.middleware do
-			local response = TS.await(middleware("__SETSTATE__", NewState, OldState))
+			local response = TS.await(middleware(Action, NewState, OldState))
 			if not response then
 				pass = false
 				break

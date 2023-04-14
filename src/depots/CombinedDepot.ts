@@ -59,7 +59,7 @@ export class _combinedDepot<TState extends object, TMutator extends object> {
 		const mutators = this.mutator[DepotName as never] as unknown as TMutator;
 		const newState = Immutable((mutators[Type] as Mutator<TState>)(currentState, ...Payload)) as TState;
 
-		this._emitMiddlewares(Type, newState, currentState).andThen((result) => {
+		this._emitMiddlewares(Type, newState, currentState, ...Payload).andThen((result) => {
 			if (!result) return;
 
 			this.state = {
@@ -70,10 +70,15 @@ export class _combinedDepot<TState extends object, TMutator extends object> {
 		});
 	}
 
-	private async _emitMiddlewares(Action: string, NewState: TState, OldState: TState): Promise<boolean> {
+	private async _emitMiddlewares(
+		Action: string,
+		NewState: TState,
+		OldState: TState,
+		...Payload: unknown[]
+	): Promise<boolean> {
 		let pass = true;
 		for (const middleware of this.middleware) {
-			const response = await middleware(Action, NewState, OldState);
+			const response = await middleware(Action, NewState, OldState, ...Payload);
 			if (!response) {
 				pass = false;
 				break;
